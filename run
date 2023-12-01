@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+  then
+    echo "Needs one argument.  exiting..."
+    exit 1
+fi
+
+clear
+bundle exec ruby runner.rb $1
