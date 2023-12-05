@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 cards = File.read(ENV.fetch('input')).split("\n")
-card_hashes = []
+
+points = 0
 
 cards.each do |card|
   # remove everything before the first colon
@@ -13,26 +14,17 @@ cards.each do |card|
 
   matches = winning_numbers & card_numbers
 
-  card_hashes << {
-    matches: matches.length,
-    copies: 1
-  }
-end
+  binary_score = ''
+  matches.length.times do
+    binary_score += '0'
+  end
 
-card_hashes.each_with_index do |card_hash, index|
-  matches = card_hash[:matches]
-  multiplier = card_hash[:copies]
-
-  next if matches.zero?
-
-  matches.times.with_index do |_, i|
-    target_index = index + i + 1
-    next if target_index >= card_hashes.length
-
-    card_hashes[index + i + 1][:copies] += 1 * multiplier
+  unless matches.empty?
+    binary_score = binary_score.chars
+    binary_score.pop
+    binary_score = binary_score.push('1').reverse.join('')
+    points += binary_score.to_i(2)
   end
 end
 
-count = card_hashes.map { |card_hash| card_hash[:copies] }.sum
-
-puts count
+puts points
